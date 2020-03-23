@@ -123,20 +123,28 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 run(); // The entire app is in a function just to make sure we don't polute the global namespace
 
 function run() {
-  var rootEl = getElementByIdOrThrow("root"); // The list of contacts
+  var rootEl = getElementByIdOrThrow("root");
+
+  if (rootEl === null) {
+    throw new Error("Missing element");
+  } // The list of contacts
+
 
   var contacts = [{
     id: "p9n51g",
     name: "Alice",
-    email: null
+    email: null,
+    phone: "02345678"
   }, {
     id: "8mopn7",
     name: "Bob",
-    email: "bob@gmail.com"
+    email: "bob@gmail.com",
+    phone: null
   }, {
     id: "u7oo0d",
     name: "Paul",
-    email: "paul@gmail.com"
+    email: "paul@gmail.com",
+    phone: null
   }]; // Call createApp to initialize the App
   // and get the contactsEl used for updates
 
@@ -166,14 +174,21 @@ function run() {
 
 
   function createAddForm() {
+    // on peut caster en HTMLInputElement mais autant mettre any car de toute facon c'ets un cast forcé et il faudrait plutôt revoir createElement
+    // const inputNameEl: HTMLInputElement = <HTMLInputElement>(
+    //   createElement("input")
+    // );
     var inputNameEl = createElement("input");
     inputNameEl.placeholder = "name";
     var inputEmailEl = createElement("input");
     inputEmailEl.placeholder = "email";
+    var inputPhoneEl = createElement("input");
+    inputPhoneEl.placeholder = "phone";
     var addButtonEl = createElement("button", {
       children: "Add"
     });
-    addButtonEl.addEventListener("click", function () {
+
+    var onAddClick = function onAddClick() {
       if (inputNameEl.value.length === 0) {
         // no name, return to stop the function
         return;
@@ -183,17 +198,21 @@ function run() {
       contacts.push({
         id: randomShortId(),
         name: inputNameEl.value,
-        email: inputEmailEl.value.length > 0 ? inputEmailEl.value : null
+        email: inputEmailEl.value.length > 0 ? inputEmailEl.value : null,
+        phone: inputPhoneEl.value.length > 0 ? inputPhoneEl.value : null
       }); // then update the app
 
       renderApp(); // and clear the inputs
 
       inputNameEl.value = "";
       inputEmailEl.value = "";
-    });
+      inputPhoneEl.value = "";
+    };
+
+    addButtonEl.addEventListener("click", onAddClick);
     var addFormEl = createElement("div", {
       className: "add",
-      children: [inputNameEl, inputEmailEl, addButtonEl]
+      children: [inputNameEl, inputEmailEl, inputPhoneEl, addButtonEl]
     });
     return {
       addFormEl: addFormEl
@@ -231,6 +250,8 @@ function run() {
             children: contact.name
           }), contact.email === null ? null : createElement("p", {
             children: contact.email
+          }), contact.phone === null ? null : createElement("p", {
+            children: contact.phone
           })]
         }), deleteEl]
       });
@@ -240,16 +261,18 @@ function run() {
       contactsEl.appendChild(elem);
     });
   }
-}
-/**
- * This function let you create an HTML element and add attributes and children
- */
+} // ou methode 2
+// interface PropsOption {
+//   className?: string;
+//   children?: string | Array<string | HTMLElement | null>;
+// }
 
 
 function createElement(type, props) {
   if (props === void 0) {
     props = {};
-  }
+  } // function createElement(type, props = {}) {
+
 
   var elem = document.createElement(type);
 
@@ -259,13 +282,15 @@ function createElement(type, props) {
 
   if (props.children) {
     var childrenArray = Array.isArray(props.children) ? props.children : [props.children];
-    childrenArray.map(function (children) {
+    childrenArray // pas nécessaire de typer le map mais si on veut le faire alors on a la ligne ci-dessous
+    // .map((children: ChildrenItem): Text | null | HTMLElement => {
+    .map(function (children) {
       if (typeof children === "string") {
         return document.createTextNode(children);
       }
 
       return children;
-    }).map(function (item) {
+    }).forEach(function (item) {
       if (item) {
         elem.appendChild(item);
       }
@@ -288,6 +313,12 @@ function getElementByIdOrThrow(id) {
   }
 
   return elem;
+}
+
+var a = getThrow("2");
+
+function getThrow(id) {
+  throw new Error("Cannot find element with id \"" + id + "\"");
 }
 /**
  * Return a short (5 chars) string ID
@@ -325,7 +356,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52873" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49766" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
