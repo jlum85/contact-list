@@ -19,20 +19,20 @@ function run() {
       id: "p9n51g",
       name: "Alice",
       email: null,
-      phone: "02345678"
+      phone: "02345678",
     },
     {
       id: "8mopn7",
       name: "Bob",
       email: "bob@gmail.com",
-      phone: null
+      phone: null,
     },
     {
       id: "u7oo0d",
       name: "Paul",
       email: "paul@gmail.com",
-      phone: null
-    }
+      phone: null,
+    },
   ];
 
   // Call createApp to initialize the App
@@ -47,24 +47,24 @@ function run() {
   function createApp(): { contactsEl: HTMLElement } {
     const titleEl: HTMLElement = createElement("h1", {
       children: "Contacts",
-      className: "title"
+      className: "title",
     });
 
     const contactsEl: HTMLElement = createElement("div", {
-      className: "contacts"
+      className: "contacts",
     });
 
     const { addFormEl } = createAddForm();
 
     const appEl: HTMLElement = createElement("div", {
       className: "app",
-      children: [titleEl, contactsEl, addFormEl]
+      children: [titleEl, contactsEl, addFormEl],
     });
 
     rootEl.appendChild(appEl);
 
     return {
-      contactsEl
+      contactsEl,
     };
   }
 
@@ -86,7 +86,7 @@ function run() {
     inputPhoneEl.placeholder = "phone";
 
     const addButtonEl: HTMLElement = createElement("button", {
-      children: "Add"
+      children: "Add",
     });
 
     const onAddClick = (): void => {
@@ -99,7 +99,7 @@ function run() {
         id: randomShortId(),
         name: inputNameEl.value,
         email: inputEmailEl.value.length > 0 ? inputEmailEl.value : null,
-        phone: inputPhoneEl.value.length > 0 ? inputPhoneEl.value : null
+        phone: inputPhoneEl.value.length > 0 ? inputPhoneEl.value : null,
       });
 
       // then update the app
@@ -114,7 +114,7 @@ function run() {
     addButtonEl.addEventListener("click", onAddClick);
     const addFormEl: HTMLElement = createElement("div", {
       className: "add",
-      children: [inputNameEl, inputEmailEl, inputPhoneEl, addButtonEl]
+      children: [inputNameEl, inputEmailEl, inputPhoneEl, addButtonEl],
     });
     return { addFormEl };
   }
@@ -130,15 +130,15 @@ function run() {
     contactsEl.innerHTML = "";
 
     // the create new elements
-    const contactItemEls = contacts.map(contact => {
+    const contactItemEls = contacts.map((contact) => {
       const deleteEl = createElement("button", {
         className: "remove",
-        children: "Delete"
+        children: "Delete",
       });
 
       deleteEl.addEventListener("click", () => {
         // remove the contact
-        contacts = contacts.filter(c => c.id !== contact.id);
+        contacts = contacts.filter((c) => c.id !== contact.id);
         // and update the app
         renderApp();
       });
@@ -155,16 +155,16 @@ function run() {
                 : createElement("p", { children: contact.email }),
               contact.phone === null
                 ? null
-                : createElement("p", { children: contact.phone })
-            ]
+                : createElement("p", { children: contact.phone }),
+            ],
           }),
-          deleteEl
-        ]
+          deleteEl,
+        ],
       });
     });
 
     // and add them to the container
-    contactItemEls.forEach(elem => {
+    contactItemEls.forEach((elem) => {
       contactsEl.appendChild(elem);
     });
   }
@@ -204,13 +204,13 @@ function createElement(
     childrenArray
       // pas nécessaire de typer le map mais si on veut le faire alors on a la ligne ci-dessous
       // .map((children: ChildrenItem): Text | null | HTMLElement => {
-      .map(children => {
+      .map((children) => {
         if (typeof children === "string") {
           return document.createTextNode(children);
         }
         return children;
       })
-      .forEach(item => {
+      .forEach((item) => {
         if (item) {
           elem.appendChild(item);
         }
@@ -245,26 +245,27 @@ function getElementByIdOrThrow(id: string): HTMLElement {
  * Return a short (5 chars) string ID
  */
 function randomShortId(): string {
-  return Math.random()
-    .toString(36)
-    .substring(7);
+  return Math.random().toString(36).substring(7);
 }
 
+interface Square {
+  width: number;
+  height: number;
+}
+interface Circle {
+  radius: number;
+}
 
-interface Square { width: number; height: number }
-interface Circle { radius: number }
-
-
-const drawShape = (shape: Square | Circle) {
-  if ("width" in shape ) {
-    console.log("Square : " + shape.width )
+const drawShape = (shape: Square | Circle) => {
+  if ("width" in shape) {
+    console.log("Square : " + shape.width);
   }
-  if ("radius" in shape ) {
+  if ("radius" in shape) {
     // comme il sait que radius n'existe que dans  Circle il en déduit que c'est un circle et ne propose que les propriétés de circle
     // attention si c'est une propriété commune à plusieurs interfaces
-    console.log("Circle : " + shape.radius )  
+    console.log("Circle : " + shape.radius);
   }
-}
+};
 
 const square: Square = { width: 2, height: 3 };
 const circle: Circle = { radius: 4 };
