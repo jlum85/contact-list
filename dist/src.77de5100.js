@@ -123,12 +123,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 run(); // The entire app is in a function just to make sure we don't polute the global namespace
 
 function run() {
-  var rootEl = getElementByIdOrThrow("root");
-
-  if (rootEl === null) {
-    throw new Error("Missing element");
-  } // The list of contacts
-
+  var rootEl = getElementByIdOrThrow("root"); // The list of contacts
 
   var contacts = [{
     id: "p9n51g",
@@ -313,13 +308,16 @@ function getElementByIdOrThrow(id) {
   }
 
   return elem;
-}
+} // console.log("test");
+// const a = getElementByIdOrThrow("ttt");
+// console.log(a);
+// function getThrow(id: string): string {
+//   if (id.length) {
+//     return id;
+//   }
+// }
+// const a = getThrow("2");
 
-var a = getThrow("2");
-
-function getThrow(id) {
-  throw new Error("Cannot find element with id \"" + id + "\"");
-}
 /**
  * Return a short (5 chars) string ID
  */
@@ -328,6 +326,28 @@ function getThrow(id) {
 function randomShortId() {
   return Math.random().toString(36).substring(7);
 }
+
+var drawShape = function drawShape(shape) {
+  if ("width" in shape) {
+    console.log("Square : " + shape.width);
+  }
+
+  if ("radius" in shape) {
+    // comme il sait que radius n'existe que dans  Circle il en déduit que c'est un circle et ne propose que les propriétés de circle
+    // attention si c'est une propriété commune à plusieurs interfaces
+    console.log("Circle : " + shape.radius);
+  }
+};
+
+var square = {
+  width: 2,
+  height: 3
+};
+var circle = {
+  radius: 4
+};
+drawShape(circle);
+drawShape(square);
 },{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -356,7 +376,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49766" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58505" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

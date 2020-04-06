@@ -12,9 +12,7 @@ type Contacts = Contact[];
 // The entire app is in a function just to make sure we don't polute the global namespace
 function run() {
   const rootEl = getElementByIdOrThrow("root");
-  if (rootEl === null) {
-    throw new Error("Missing element");
-  }
+
   // The list of contacts
   let contacts: Contacts = [
     {
@@ -64,17 +62,21 @@ function run() {
     });
 
     rootEl.appendChild(appEl);
+
     return {
       contactsEl
     };
   }
+
   // Create the add form structure
   function createAddForm(): { addFormEl: HTMLElement } {
     // on peut caster en HTMLInputElement mais autant mettre any car de toute facon c'ets un cast forcé et il faudrait plutôt revoir createElement
     // const inputNameEl: HTMLInputElement = <HTMLInputElement>(
     //   createElement("input")
     // );
-    const inputNameEl: HTMLInputElement = createElement("input") as any;
+    const inputNameEl: HTMLInputElement = createElement(
+      "input"
+    ) as HTMLInputElement;
     inputNameEl.placeholder = "name";
 
     const inputEmailEl: HTMLInputElement = createElement("input") as any;
@@ -186,7 +188,10 @@ interface PropsOption {
 //   children?: string | Array<string | HTMLElement | null>;
 // }
 
-function createElement(type: string, props: PropsOption = {}): HTMLElement {
+function createElement(
+  type: string,
+  props: PropsOption = {}
+): HTMLElement | HTMLInputElement {
   // function createElement(type, props = {}) {
   const elem = document.createElement(type);
   if (props.className) {
@@ -225,10 +230,16 @@ function getElementByIdOrThrow(id: string): HTMLElement {
   return elem;
 }
 
-const a = getThrow("2");
-function getThrow(id: string): void {
-  throw new Error(`Cannot find element with id "${id}"`);
-}
+// console.log("test");
+// const a = getElementByIdOrThrow("ttt");
+// console.log(a);
+// function getThrow(id: string): string {
+//   if (id.length) {
+//     return id;
+//   }
+// }
+
+// const a = getThrow("2");
 
 /**
  * Return a short (5 chars) string ID
@@ -238,3 +249,24 @@ function randomShortId(): string {
     .toString(36)
     .substring(7);
 }
+
+
+interface Square { width: number; height: number }
+interface Circle { radius: number }
+
+
+const drawShape = (shape: Square | Circle) {
+  if ("width" in shape ) {
+    console.log("Square : " + shape.width )
+  }
+  if ("radius" in shape ) {
+    // comme il sait que radius n'existe que dans  Circle il en déduit que c'est un circle et ne propose que les propriétés de circle
+    // attention si c'est une propriété commune à plusieurs interfaces
+    console.log("Circle : " + shape.radius )  
+  }
+}
+
+const square: Square = { width: 2, height: 3 };
+const circle: Circle = { radius: 4 };
+drawShape(circle);
+drawShape(square);
